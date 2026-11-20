@@ -10,96 +10,61 @@
 <style>
   :root {
     --bg: #000000;
-    --surface: rgba(255, 255, 255, 0.02);
-    --border: rgba(50, 145, 255, 0.14);
-    --blue: #3291ff;
-    --blue-deep: #0070f3;
+    --card-bg: rgba(5, 10, 18, 0.88); /* Solid-ish background biar ringan & teks kebaca */
+    --border: rgba(50, 145, 255, 0.25);
+    --blue: #0070f3;
+    --blue-light: #3291ff;
     --cyan: #00d4ff;
     --text: #ededed;
     --text-soft: #a1a1a1;
     --muted: #666666;
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Space Grotesk', sans-serif;
+    
+    /* Gambar dari request lo */
+    --hero-bg: url('https://p16-common-sign.tiktokcdn.com/tos-alisg-avt-0068/1152ca661eb6491e8248cd9bb4bf32ae~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=5fbaa0f8&x-expires=1795323600&x-signature=zmmL%2BcsksZOVEWb%2BLA0uoKXEMcg%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my2');
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
-
   body {
-    background:
-      radial-gradient(ellipse 80% 55% at 50% -10%, rgba(50, 145, 255, 0.10), transparent 65%),
-      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0, 212, 255, 0.06), transparent 60%),
-      var(--bg);
+    background-color: var(--bg);
     color: var(--text);
     font-family: var(--sans);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 18px;
+    padding: 40px 18px;
     position: relative;
-    overflow-x: hidden;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Subtle grid atmosphere */
+  /* Background Image + Overlay */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-      linear-gradient(rgba(50, 145, 255, 0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(50, 145, 255, 0.022) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 15%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, black 15%, transparent 75%);
+    background-image: var(--hero-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.15; /* Dibikin redup biar ga nabrak teks */
+    z-index: -2;
+    /* Efek grayscale dikit biar makin nyatu sama tema biru */
+    filter: grayscale(40%) sepia(100%) hue-rotate(180deg) saturate(300%) contrast(120%);
   }
 
-  /* Faint scanlines */
+  /* Gradient Overlay biar aman dibaca */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 112, 243, 0.15), transparent 60%),
+                linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.95));
+    z-index: -1;
     pointer-events: none;
-    z-index: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0, 0, 0, 0.15) 3px,
-      rgba(0, 0, 0, 0.15) 4px
-    );
-    opacity: 0.25;
-  }
-
-  /* Soft glows */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-  }
-  .orb-blue {
-    width: 560px; height: 560px;
-    background: radial-gradient(circle, rgba(50, 145, 255, 0.18), transparent 70%);
-    top: -200px; left: -140px;
-    animation: drift 16s ease-in-out infinite alternate;
-  }
-  .orb-cyan {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.12), transparent 70%);
-    bottom: -200px; right: -120px;
-    animation: drift 20s ease-in-out infinite alternate-reverse;
-  }
-  @keyframes drift {
-    from { transform: translate(0, 0) scale(1); }
-    to   { transform: translate(50px, 30px) scale(1.15); }
   }
 
   .shell {
@@ -114,7 +79,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     padding: 0 4px;
     gap: 12px;
   }
@@ -126,14 +91,13 @@
     font-size: 11.5px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--blue);
-    text-shadow: 0 0 20px rgba(50, 145, 255, 0.4);
+    color: var(--blue-light);
   }
   .brand-dot {
     width: 7px; height: 7px;
-    background: var(--blue);
+    background: var(--blue-light);
     border-radius: 50%;
-    box-shadow: 0 0 0 4px rgba(50, 145, 255, 0.12), 0 0 14px var(--blue);
+    box-shadow: 0 0 10px var(--blue-light);
     animation: pulse 2.2s ease-in-out infinite;
   }
   @keyframes pulse {
@@ -146,36 +110,58 @@
     letter-spacing: 0.16em;
     color: var(--muted);
     text-transform: uppercase;
-    white-space: nowrap;
   }
 
   /* Main card */
   .card {
     position: relative;
-    background: linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.008));
+    background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 42px 38px 34px;
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    border-radius: 8px;
+    padding: 0 38px 34px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(50, 145, 255, 0.1) inset;
     overflow: hidden;
-    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.015) inset;
   }
 
-  /* Top light line */
-  .card::before {
+  /* Banner Gambar di dalam Card */
+  .hero-banner {
+    margin: 0 -38px 30px;
+    height: 180px;
+    background: var(--hero-bg) center/cover no-repeat;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-banner::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 20px;
-    right: 20px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(50, 145, 255, 0.6), transparent);
-    pointer-events: none;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 20%, var(--card-bg) 100%);
+  }
+
+  /* Avatar melayang di atas banner */
+  .avatar-container {
+    position: relative;
+    margin-top: -60px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--hero-bg) center/cover;
+    border: 3px solid var(--card-bg);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 0 1px rgba(50, 145, 255, 0.5);
+    position: relative;
+    z-index: 2;
   }
 
   /* Header */
+  .header-text {
+    text-align: center;
+    margin-bottom: 28px;
+  }
   .eyebrow {
     display: inline-flex;
     align-items: center;
@@ -185,47 +171,39 @@
     letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--cyan);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
-  .eyebrow::before {
+  .eyebrow::before, .eyebrow::after {
     content: '';
-    width: 18px;
+    width: 16px;
     height: 1px;
     background: var(--cyan);
-    box-shadow: 0 0 10px var(--cyan);
+    opacity: 0.5;
   }
 
   h1 {
-    font-size: clamp(26px, 4.6vw, 40px);
+    font-size: clamp(26px, 4.6vw, 36px);
     font-weight: 700;
     letter-spacing: -0.03em;
-    line-height: 1.06;
-    margin-bottom: 18px;
-    background: linear-gradient(100deg, #ffffff 10%, var(--blue) 50%, #ffffff 90%);
+    line-height: 1.1;
+    background: linear-gradient(100deg, #ffffff 10%, var(--blue-light) 50%, #ffffff 90%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: gradShift 9s ease-in-out infinite alternate;
-  }
-  @keyframes gradShift {
-    from { background-position: 0% center; }
-    to   { background-position: 100% center; }
   }
 
   .reason {
     font-size: 13.5px;
     color: var(--text-soft);
     line-height: 1.8;
-    max-width: 62ch;
-    margin-bottom: 34px;
-    border-left: 2px solid rgba(50, 145, 255, 0.3);
-    padding-left: 16px;
+    max-width: 65ch;
+    margin: 0 auto 34px;
+    text-align: center;
   }
   .reason strong {
-    color: var(--blue);
-    font-weight: 600;
-    text-shadow: 0 0 20px rgba(50, 145, 255, 0.25);
+    color: var(--cyan);
+    font-weight: 500;
   }
 
   /* Section label */
@@ -244,36 +222,33 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, rgba(50, 145, 255, 0.25), transparent);
+    background: linear-gradient(90deg, rgba(50, 145, 255, 0.3), transparent);
   }
 
   /* Key blocks */
   .key-grid {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
     margin-bottom: 32px;
   }
 
   .key-block {
     position: relative;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(50, 145, 255, 0.15);
-    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(50, 145, 255, 0.2);
+    border-radius: 4px;
     padding: 18px 18px 16px;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: border-color 0.2s ease;
   }
   .key-block:hover {
-    border-color: rgba(50, 145, 255, 0.45);
-    box-shadow: 0 0 36px rgba(50, 145, 255, 0.08), inset 0 0 28px rgba(50, 145, 255, 0.025);
+    border-color: rgba(50, 145, 255, 0.6);
   }
   .key-block.cyan {
-    border-color: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.2);
   }
   .key-block.cyan:hover {
-    border-color: rgba(0, 212, 255, 0.45);
-    box-shadow: 0 0 36px rgba(0, 212, 255, 0.08), inset 0 0 28px rgba(0, 212, 255, 0.025);
+    border-color: rgba(0, 212, 255, 0.6);
   }
 
   .key-head {
@@ -281,38 +256,33 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .key-tag {
     font-family: var(--mono);
     font-size: 9.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--blue);
-    background: rgba(50, 145, 255, 0.07);
-    border: 1px solid rgba(50, 145, 255, 0.2);
+    color: var(--blue-light);
+    background: rgba(50, 145, 255, 0.1);
     padding: 4px 9px;
     border-radius: 2px;
   }
   .key-block.cyan .key-tag {
     color: var(--cyan);
-    background: rgba(0, 212, 255, 0.07);
-    border-color: rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.1);
   }
 
   .key-value {
     font-family: var(--mono);
     font-size: clamp(11.5px, 1.8vw, 12.5px);
-    color: #a5c8ff;
+    color: #fff;
     word-break: break-all;
     line-height: 1.7;
-    letter-spacing: 0.01em;
-    text-shadow: 0 0 22px rgba(50, 145, 255, 0.2);
-    padding-right: 52px;
+    padding-right: 60px;
   }
   .key-block.cyan .key-value {
-    color: #a5f0ff;
-    text-shadow: 0 0 22px rgba(0, 212, 255, 0.2);
+    color: #e0f7fa;
   }
 
   .copy-btn {
@@ -326,41 +296,33 @@
     font-size: 9.5px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--muted);
-    background: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-soft);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 6px 10px;
     border-radius: 2px;
     cursor: pointer;
     transition: all 0.2s ease;
-    user-select: none;
   }
   .copy-btn:hover {
-    color: var(--blue);
-    border-color: rgba(50, 145, 255, 0.4);
-    background: rgba(50, 145, 255, 0.06);
+    color: #fff;
+    background: rgba(50, 145, 255, 0.2);
+    border-color: var(--blue-light);
   }
   .key-block.cyan .copy-btn:hover {
-    color: var(--cyan);
-    border-color: rgba(0, 212, 255, 0.4);
-    background: rgba(0, 212, 255, 0.06);
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--cyan);
   }
   .copy-btn.copied {
     color: #000;
-    background: var(--blue);
-    border-color: var(--blue);
+    background: var(--blue-light);
+    border-color: var(--blue-light);
   }
   .key-block.cyan .copy-btn.copied {
     background: var(--cyan);
     border-color: var(--cyan);
   }
-  .copy-btn svg {
-    width: 11px;
-    height: 11px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-  }
+  .copy-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
 
   /* Footer */
   .foot {
@@ -370,36 +332,32 @@
     justify-content: space-between;
     gap: 14px;
     padding-top: 24px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
   .foot-note {
     font-size: 11px;
-    color: var(--muted);
-    line-height: 1.65;
-  }
-  .foot-note strong {
     color: var(--text-soft);
-    font-weight: 500;
+    line-height: 1.6;
   }
+  .foot-note strong { color: #fff; font-weight: 500; }
+  
   .foot-link {
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--blue);
-    border: 1px solid rgba(50, 145, 255, 0.25);
-    padding: 9px 16px;
-    border-radius: 2px;
-    transition: all 0.22s ease;
+    color: #fff;
+    background: var(--blue);
+    border: 1px solid var(--blue);
+    padding: 10px 18px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
     white-space: nowrap;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-    background: rgba(50, 145, 255, 0.03);
   }
   .foot-link:hover {
-    background: rgba(50, 145, 255, 0.1);
-    box-shadow: 0 0 30px rgba(50, 145, 255, 0.15);
-    border-color: rgba(50, 145, 255, 0.55);
+    background: var(--blue-light);
+    box-shadow: 0 0 20px rgba(50, 145, 255, 0.4);
   }
 
   /* Toast */
@@ -412,59 +370,53 @@
     font-size: 11px;
     letter-spacing: 0.08em;
     color: #000;
-    background: var(--blue);
+    background: var(--cyan);
     padding: 10px 20px;
-    border-radius: 2px;
-    box-shadow: 0 0 50px rgba(50, 145, 255, 0.4);
+    border-radius: 4px;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease, transform 0.25s ease;
     z-index: 99;
-    font-weight: 500;
+    font-weight: 600;
   }
-  .toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
   @media (max-width: 540px) {
-    .card { padding: 30px 20px 24px; }
+    .card { padding: 0 20px 24px; }
+    .hero-banner { margin: 0 -20px 20px; height: 140px; }
     .key-value { padding-right: 0; margin-bottom: 34px; }
-    .copy-btn { right: 12px; bottom: 10px; }
     .foot { flex-direction: column; align-items: flex-start; }
     .foot-link { width: 100%; text-align: center; }
-    .topbar-meta { display: none; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
   }
 </style>
 </head>
 <body>
-
-  <div class="orb orb-blue"></div>
-  <div class="orb orb-cyan"></div>
 
   <div class="shell">
 
     <div class="topbar">
       <div class="brand">
         <span class="brand-dot"></span>
-        ASYLUM FOUNDATION
+        ASYLUM KONTOT
       </div>
-      <div class="topbar-meta">KEY ROTATION // NOTICE</div>
+      <div class="topbar-meta">SYS.UPDATE // 2024</div>
     </div>
 
     <main class="card">
+      
+      <!-- Banner gambar di atas -->
+      <div class="hero-banner"></div>
+      
+      <!-- Avatar melayang -->
+      <div class="avatar-container">
+        <div class="avatar"></div>
+      </div>
 
-      <div class="eyebrow">Perubahan Kebijakan Key</div>
-
-      <h1>Pergantian Key<br />Untuk Semua Crack</h1>
+      <div class="header-text">
+        <div class="eyebrow">Perubahan Kebijakan Key</div>
+        <h1>Pergantian Key<br />Untuk Semua Crack</h1>
+      </div>
 
       <p class="reason">
         Dikarenakan banyak pihak yang ingin mengeksploitasi serta mengkomersialisasi crack yang disediakan secara gratis demi memenuhi prinsip kebebasan informasi di dunia maya (<strong>everything is free in this cyber world</strong>), gw kontoy mewakili <strong>Asylum Foundation</strong> akan melakukan perubahan kebijakan terhadap key yang berlaku ke depannya. Mohon diperhatikan dengan saksama — hal ini bertujuan demi kenyamanan dan keamanan bersama.
@@ -479,7 +431,7 @@
             <span class="key-tag">AA+ / XMOD / ATTIC CRACK</span>
           </div>
           <div class="key-value" id="key1">MLBB-CRACK-INI-GRATIS-JIKABAYAR-LAPOR-KE-tiktok.com/@asylumsec</div>
-          <button class="copy-btn" data-target="key1" aria-label="Salin key AA+, XMOD, ATTIC">
+          <button class="copy-btn" data-target="key1">
             <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Salin
           </button>
@@ -490,7 +442,7 @@
             <span class="key-tag">OTHER CRACK</span>
           </div>
           <div class="key-value" id="key2">CRACK-INI-GRATIS-JIKA-MEMBAYAR-LAPOR-KE-tiktok.com/@asylumsec</div>
-          <button class="copy-btn" data-target="key2" aria-label="Salin key Other Crack">
+          <button class="copy-btn" data-target="key2">
             <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Salin
           </button>
@@ -512,7 +464,7 @@
 
   </div>
 
-  <div class="toast" id="toast">Key disalin ke clipboard.</div>
+  <div class="toast" id="toast">Key berhasil disalin!</div>
 
   <script>
     const toast = document.getElementById('toast');
